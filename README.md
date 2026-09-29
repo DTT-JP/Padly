@@ -44,20 +44,20 @@ python3 -m http.server 8000         # http://localhost:8000 を開く
 
 ## GitHubへアップロードして公開する
 
-1. GitHubで **New repository** を作成（例: `ipados-defer-tracker`、Public、README等の追加は不要）
+1. GitHubで **New repository** を作成（例: `Padly`、Public、README等の追加は不要）
 2. このフォルダで以下を実行（`<USER>` は自分のGitHubユーザー名）
    ```bash
    git init
    git add .
    git commit -m "first commit"
    git branch -M main
-   git remote add origin https://github.com/<USER>/ipados-defer-tracker.git
+   git remote add origin https://github.com/<USER>/Padly.git
    git push -u origin main
    ```
 3. リポジトリの **Settings** → **Pages** → **Build and deployment** → **Source** を **GitHub Actions** に変更
 4. **Settings** → **Actions** → **General** → **Workflow permissions** を **Read and write permissions** にして **Save**（データ自動コミットに必要。項目名は要確認）
 5. **Actions** タブ → **update-data-and-deploy** → **Run workflow** で初回実行
-6. 成功後、`https://<USER>.github.io/ipados-defer-tracker/` をiPadのSafariで開く
+6. 成功後、`https://<USER>.github.io/Padly/` をiPadのSafariで開く
 
 補足:
 - Actionsで `GITHUB_TOKEN` によりpushしたコミットは、ブランチ公開方式のPagesビルドを起動しないと公式ドキュメントに記載があるため、本リポジトリはPagesを**Actions方式**でデプロイしています。
