@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Padly</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=block">
+<style>
+:root{color-scheme:light;
+--p:#007AFF;--on-p:#fff;--pc:#D6E7FF;--on-pc:#001A41;
+--tc:#D3F2DA;--on-tc:#00210E;--s:#fff;--on-s:#1B1C1E;--on-sv:#43474E;
+--c1:#F5F7FA;--c2:#EBEFF5;--c3:#E1E6EE;--ol:#73777F;--ov:#C7CCD5;
+--r-m:12px;--r-l:16px;--r-xl:28px;--e:cubic-bezier(.2,0,0,1)}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;
+--p:#409CFF;--on-p:#00284F;--pc:#0B3A75;--on-pc:#D6E7FF;
+--tc:#0F3D22;--on-tc:#B7F0C3;--s:#000;--on-s:#E3E4E8;--on-sv:#C3C7CF;
+--c1:#0A0B0D;--c2:#121419;--c3:#1A1D23;--ol:#8D9199;--ov:#2C3038}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--s);color:var(--on-s);font:400 16px/24px -apple-system,"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;letter-spacing:.3px;
+padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.ms{font-family:"Material Symbols Outlined";font-size:24px;line-height:1;font-weight:400;font-style:normal;letter-spacing:normal;display:inline-block;vertical-align:middle}
+header{position:sticky;top:0;z-index:2;background:var(--c1);display:flex;align-items:center;gap:12px;height:64px;padding:0 24px;border-bottom:1px solid var(--ov)}
+header h1{margin:0;font-size:22px;line-height:28px;font-weight:400}
+header .ms{color:var(--p)}
+main{max-width:840px;margin:0 auto;padding:16px 16px 48px;display:grid;gap:16px}
+.card{background:var(--c2);border-radius:var(--r-xl);padding:20px 24px}
+.hero{background:var(--pc);color:var(--on-pc)}
+.hero small{display:block;font-size:12px;line-height:16px;letter-spacing:.5px;text-transform:none;opacity:.85}
+.hero .big{font-size:28px;line-height:36px;font-weight:500;margin:4px 0 2px}
+.hero .sub{font-size:14px;line-height:20px;margin-top:8px}
+.lbl{font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;color:var(--on-sv)}
+.row-set{display:flex;align-items:center;gap:16px;margin-top:8px}
+.days{font-size:32px;line-height:40px;min-width:5ch;color:var(--p);font-weight:500}
+input[type=range]{flex:1;accent-color:var(--p);height:44px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip,.seg button{font-size:14px;line-height:20px;font-weight:500;font-family:inherit;border:1px solid var(--ol);background:transparent;color:var(--on-sv);border-radius:8px;height:40px;padding:0 16px;cursor:pointer;transition:background .2s var(--e)}
+.chip[aria-pressed=true],.seg button[aria-pressed=true]{background:var(--pc);color:var(--on-pc);border-color:transparent}
+.chip:hover,.seg button:hover{filter:brightness(.96)}
+.chip:focus-visible,.seg button:focus-visible,input:focus-visible{outline:3px solid var(--p);outline-offset:2px}
+.seg{display:flex}.seg button{flex:1;border-radius:0;height:48px}
+.seg button:first-child{border-radius:24px 0 0 24px}.seg button:last-child{border-radius:0 24px 24px 0;margin-left:-1px}
+ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:16px;background:var(--c1);border:1px solid var(--ov);border-radius:var(--r-l);padding:12px 20px;min-height:72px}
+.row b{font-weight:500}.row small{display:block;font-size:12px;line-height:16px;color:var(--on-sv)}
+.st{text-align:right;font-size:14px;line-height:20px;font-weight:500}
+.st span{display:inline-block;border-radius:8px;padding:2px 10px}
+.ok span{background:var(--tc);color:var(--on-tc)}.wait span{background:var(--pc);color:var(--on-pc)}.end span{background:var(--c3);color:var(--on-sv)}
+.st small{margin-top:2px}
+input[type=date]{font-family:inherit;font-size:16px;color:var(--on-s);background:var(--c1);border:1px solid var(--ol);border-radius:8px;height:48px;padding:0 12px}
+.note{font-size:12px;line-height:16px;color:var(--on-sv)}
+footer{font-size:12px;line-height:18px;color:var(--on-sv);display:grid;gap:6px}
+a{color:var(--p)}
+.row{flex-wrap:wrap}.row details{flex-basis:100%}.row summary{cursor:pointer;font-size:12px;color:var(--on-sv)}
+details.card>summary{cursor:pointer;min-height:44px;display:flex;align-items:center}
+.gh{font-size:16px;line-height:24px;font-weight:500;margin:16px 0 8px;color:var(--p)}.links a{margin-right:12px}
+select{font-family:inherit;font-size:16px;color:var(--on-s);background:var(--c1);border:1px solid var(--ol);border-radius:8px;height:48px;padding:0 12px;width:100%;margin-top:8px}
+</style>
+</head>
+<body>
+<header><span class="ms">tablet_mac</span><h1>Padly</h1></header>
+<main>
+  <section class="card hero" aria-live="polite">
+    <small id="heroLbl"></small>
+    <div class="big" id="heroBig">読み込み中…</div>
+    <div id="heroSub" class="sub"></div>
+  </section>
+
+  <details class="card" id="set"><summary class="lbl" id="sum"></summary>
+    <div class="lbl" style="margin-top:12px">遅延日数（MDMの「ソフトウェアアップデートの遅延」）</div>
+    <div class="row-set"><div class="days"><span id="dv">30</span>日</div>
+      <input id="days" type="range" min="1" max="90" step="1" value="30" aria-label="遅延日数"></div>
+    <div class="lbl" style="margin-top:12px">iPadモデル（Apple公式の対応機種一覧に載っているものから選択）</div>
+    <select id="model" aria-label="iPadモデル"></select>
+    <div class="lbl" style="margin-top:12px">使用中の iPadOS（メジャー）</div>
+    <div class="chips" id="majors"></div>
+    <div class="note" style="margin-top:12px">設定はこの端末のSafariに保存され、次回から自動で反映されます。</div>
+  </details>
+
+  <div class="seg" role="group" aria-label="表示切替">
+    <button id="tUp" aria-pressed="true">予定（ベータ中）</button>
+    <button id="tHist" aria-pressed="false">履歴</button>
+  </div>
+
+  <section id="pUp" class="card">
+    <div class="lbl">仮の公開日</div>
+    <div class="row-set"><input type="date" id="sim" aria-label="仮の公開日"><span class="note">Appleは公開日を事前に発表しません。この日に公開された場合の入手可能日を計算します。</span></div>
+    <div id="upList"></div>
+  </section>
+  <section id="pHist" class="card" hidden><div id="hList"></div></section>
+
+  <footer>
+    <div id="upd"></div>
+    <div>出典: Apple Developer Releases RSS / Apple Software Lookup Service (GDMF)。遅延は<b>監視対象（supervised）</b>のiPad向け設定で、Appleが公開した日から1〜90日後に更新が表示される仕様です。</div>
+    <div>入手可能日は「公開日＋遅延日数」の目安です（時刻の境界はAppleが明記していないため要確認）。メジャー／マイナーの提供方針（推奨ケイデンス）や個別のMDM設定で実際の表示は変わる場合があります。</div>
+  </footer>
+</main>
+<script>
+const $=s=>document.querySelector(s),DAY=864e5;
+const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+const S={days:store.get('days',30),major:store.get('major',null),model:store.get('model',''),sim:new Date().toLocaleDateString('sv-SE')};
+let D={releases:[],betas:[],models:{}},first=true;
+const maj=v=>+v.split('.')[0],esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=d=>d.toLocaleDateString('ja-JP',{month:'short',day:'numeric',weekday:'short',year:'numeric'});
+const avail=iso=>new Date(new Date(iso).getTime()+S.days*DAY),left=d=>Math.ceil((d-Date.now())/DAY);
+// 実機種カタログ（line=系統, ord=新しさ）。Appleの「〇〇 and later」表記との照合に使用
+const CAT=[...[5,6,7,8,9,10].map(n=>[`iPad (${n}th generation)`,'pad',n]),['iPad (A16)','pad',11],
+['iPad mini (4th generation)','mini',4],['iPad mini (5th generation)','mini',5],['iPad mini (6th generation)','mini',6],['iPad mini (A17 Pro)','mini',7],
+['iPad Air 2','air',2],['iPad Air (3rd generation)','air',3],['iPad Air (4th generation)','air',4],['iPad Air (5th generation)','air',5],
+...[['M2',6],['M3',7],['M4',8]].flatMap(([c,o])=>[[`iPad Air 11-inch (${c})`,'air',o],[`iPad Air 13-inch (${c})`,'air',o]]),
+['iPad Pro 9.7-inch','p97',1],['iPad Pro 10.5-inch','p105',1],
+...['1st','2nd','3rd','4th'].map((t,i)=>[`iPad Pro 11-inch (${t} generation)`,'p11',i+1]),['iPad Pro 11-inch (M4)','p11',5],['iPad Pro 11-inch (M5)','p11',6],
+...['1st','2nd','3rd','4th','5th','6th'].map((t,i)=>[`iPad Pro 12.9-inch (${t} generation)`,'p12',i+1]),['iPad Pro 13-inch (M4)','p12',7],['iPad Pro 13-inch (M5)','p12',8]];
+function parse(p){let m;const l=/ and later$/.test(p);p=p.replace(/ and later$/,'');if(/ - /.test(p))return null;
+ if(m=p.match(/^iPad Pro 12\.9-inch (\d)/))return['p12',+m[1],l];if(/^iPad Pro 13-inch/.test(p))return['p12',7,l];
+ if(m=p.match(/^iPad Pro 11-inch (\d)/))return['p11',+m[1],l];if(/^iPad Pro 10\.5/.test(p))return['p105',1,l];if(/^iPad Pro 9\.7/.test(p))return['p97',1,l];
+ if(m=p.match(/^iPad Air \(?(\d)/))return['air',+m[1],l];if(m=p.match(/^iPad mini \(?(\d)/))return['mini',+m[1],l];
+ if(m=p.match(/^iPad \(?(\d+)/))return['pad',+m[1],l];return null}
+// 対応判定: true=対応 / false=非対応 / null=公式表記なし・解釈不能（表示は残す）
+function fits(r,M){const ps=(r.models||[]).map(parse).filter(Boolean);if(!ps.length)return null;
+  return ps.some(x=>x[0]===M[1]&&(x[2]?M[2]>=x[1]:M[2]===x[1]))}
+const MOD=()=>CAT.find(c=>c[0]===S.model);
+const okM=r=>{const M=MOD();return !M||fits(r,M)!==false};
+const cand=()=>D.releases.filter(r=>okM(r)&&(!S.major||maj(r.version)>=S.major));
+function status(r){const a=avail(r.released),n=left(a);
+  if(r.expires&&new Date(r.expires)<new Date())return{c:'end',t:'配信終了',a};
+  return n<=0?{c:'ok',t:'入手可能',a}:{c:'wait',t:`あと${n}日`,a}}
+const lk=r=>`<div class="links note">${r.sec?`<a href="${esc(r.sec)}" target="_blank" rel="noopener">セキュリティ情報</a>`:''}${r.link?`<a href="${esc(r.link)}" target="_blank" rel="noopener">リリース情報</a>`:''}${r.notes?`<a href="${esc(r.notes)}" target="_blank" rel="noopener">リリースノート</a>`:''}</div>`;
+const dev=r=>r.models?.length?`<details><summary>対応モデル（Apple公式表記）</summary><div class="note">${r.models.map(esc).join('<br>')}</div></details>`:'<div class="note">対応モデル: 未公表（ベータ等）／データ更新で反映</div>';
+function grp(list,row){const g={};list.forEach(x=>(g[maj(x.version)]??=[]).push(x));
+  return Object.keys(g).sort((a,b)=>b-a).map(m=>`<h3 class="gh">iPadOS ${m}</h3><ul>${g[m].map(row).join('')}</ul>`).join('')||'<p class="note">該当するデータがありません。</p>'}
+function hero(){
+  const L=cand().map(r=>({r,s:status(r)})),ok=L.filter(x=>x.s.c==='ok').sort((x,y)=>new Date(y.r.released)-new Date(x.r.released))[0],
+  nx=L.filter(x=>x.s.c==='wait').sort((x,y)=>x.s.a-y.s.a)[0];
+  $('#heroLbl').textContent=`遅延 ${S.days}日 ／ ${S.model||'モデル未選択'} ／ ${S.major?'iPadOS '+S.major+' 以降':'すべての系統'}`;
+  if(nx){$('#heroBig').textContent=`次に入れられる: ${nx.r.version}`;
+    $('#heroSub').textContent=`${fmt(nx.s.a)}（あと${left(nx.s.a)}日）から表示。`+(ok?` 現在入れられる最新は ${ok.r.version}。`:' 現在入れられる対象はありません。')}
+  else if(ok){$('#heroBig').textContent=`最新: ${ok.r.version}`;$('#heroSub').textContent='待機中の更新はありません。'}
+  else{$('#heroBig').textContent='該当なし';$('#heroSub').textContent=''}
+  $('#sum').textContent=`設定: 遅延${S.days}日 ／ ${S.model||'モデル未選択'} ／ ${S.major||'すべて'} ▾`}
+function hist(){$('#hList').innerHTML=grp(cand(),r=>{const s=status(r);
+  return`<li class="row"><div><b>iPadOS ${esc(r.version)}</b><small>${esc(r.build)} ・ 公開 ${fmt(new Date(r.released))}</small>${lk(r)}</div><div class="st ${s.c}"><span>${s.t}</span><small>${fmt(s.a)}</small></div>${dev(r)}</li>`})}
+function up(){const seen=new Set(),B=D.betas.filter(b=>(!S.major||maj(b.version)>=S.major)&&!seen.has(b.version)&&seen.add(b.version)),base=new Date(S.sim+'T00:00:00');
+  $('#upList').innerHTML=grp(B,b=>{const a=new Date(base.getTime()+S.days*DAY);
+  return`<li class="row"><div><b>iPadOS ${esc(b.version)}</b><small>${esc(b.label)}（${esc(b.build)}）・ 公開日は未定</small>${lk(b)}</div><div class="st wait"><span>仮 ${fmt(a)}</span><small>公開日＋${S.days}日</small></div>${dev(b)}</li>`})}
+function majors(){const M=[...new Set(D.releases.map(r=>maj(r.version)))].sort((a,b)=>b-a);
+  if(S.major===null)S.major=M[1]??M[0]??0;
+  $('#majors').innerHTML=[0,...M].map(m=>`<button class="chip" data-m="${m}" aria-pressed="${m===S.major}">${m?m+' 以降':'すべて'}</button>`).join('')}
+function models(){const ok=CAT.filter(c=>D.releases.some(r=>fits(r,c)===true));  // 取得済みの更新の対応機種一覧に載っているモデルのみ
+  $('#model').innerHTML='<option value="">未選択（すべて表示）</option>'+ok.map(c=>`<option${c[0]===S.model?' selected':''}>${esc(c[0])}</option>`).join('')}
+function all(){hero();hist();up();$('#dv').textContent=S.days}
+function init(d){D={releases:[],betas:[],models:{},...d};$('#days').value=S.days;$('#sim').value=S.sim;models();majors();all();
+  if(first){$('#set').open=!S.model;first=false}
+  $('#upd').textContent='データ更新: '+fmt(new Date(D.updated))+'（サーバー側で毎日自動取得）'}
+$('#days').oninput=e=>{S.days=+e.target.value;store.set('days',S.days);all()};
+$('#model').onchange=e=>{S.model=e.target.value;store.set('model',S.model);all()};
+$('#majors').onclick=e=>{const m=e.target.closest('[data-m]');if(!m)return;S.major=+m.dataset.m;store.set('major',S.major);majors();all()};
+$('#sim').onchange=e=>{if(e.target.value){S.sim=e.target.value;up()}};
+const tab=t=>{$('#pUp').hidden=t!=='up';$('#pHist').hidden=t!=='hist';$('#tUp').setAttribute('aria-pressed',t==='up');$('#tHist').setAttribute('aria-pressed',t==='hist')};
+$('#tUp').onclick=()=>tab('up');$('#tHist').onclick=()=>tab('hist');
+const c=store.get('data',null);if(c)init(c);  // 保存済みデータで即表示 → 最新を取得して更新
+fetch('data/releases.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{store.set('data',d);init(d)})
+ .catch(()=>{if(!c){$('#heroBig').textContent='データを読み込めませんでした';$('#heroSub').textContent='data/releases.json を確認してください。'}});
+</script>
+</body>
+</html>
