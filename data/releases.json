@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-04T21:26:53+00:00",
+ "updated": "2026-10-06T00:04:11+00:00",
  "releases": [
   {
    "version": "27.0.1",
@@ -1238,6 +1238,14 @@
   }
  ],
  "betas": [
+  {
+   "version": "27.2",
+   "build": "24B5099f",
+   "label": "beta 3",
+   "seen": "2026-10-05T18:00:00+00:00",
+   "link": "https://developer.apple.com/news/releases/?id=10052026b",
+   "notes": "https://developer.apple.com/go/?id=ipados-27_2-rn"
+  },
   {
    "version": "27.2",
    "build": "24B5089g",
