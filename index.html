@@ -275,7 +275,7 @@ ul.list{list-style:none;margin:0;padding:0}
         <p class="body-small supporting" style="margin-top:0">Apple公式の対応機種一覧に載っているものから選択します。</p>
       </div>
       <div class="set-sec">
-        <div class="title-small cap">表示するメジャー（次に入れれる・予定・履歴）</div>
+        <div class="title-small cap">表示するメジャー（現在・次に入れれる・予定・履歴）</div>
         <div class="chips" id="nxMajors" role="group" aria-label="表示するiPadOSメジャー"></div>
         <p class="body-small supporting" style="margin:0">タップでオフにすると、そのメジャーを表示しません。初期値は最新の2つです。</p>
       </div>
@@ -394,13 +394,11 @@ function betaList(){const seen=new Set();return D.betas.filter(b=>nxOk(b.version
 
 /* 上部2カード:「現在入れれる」「次に入れれる」 */
 function hero(){
-  const L=base().map(r=>({r,s:status(r)})),
+  const L=cand().map(r=>({r,s:status(r)})),  // 表示するメジャーのみ（現在・次ともに）
   cur=L.filter(x=>x.s.c==='ok').sort((x,y)=>vc(y.r.version,x.r.version))[0],
-  P2=L.filter(x=>nxOk(x.r.version)),  // 「次に入れれる」用（メジャー制限後）
-  curN=P2.filter(x=>x.s.c==='ok').sort((x,y)=>vc(y.r.version,x.r.version))[0],
-  newer=x=>!curN||vc(x.r.version,curN.r.version)>0,
-  nx=P2.filter(x=>x.s.c==='wait'&&newer(x)).sort((x,y)=>x.s.a-y.s.a||vc(y.r.version,x.r.version))[0],
-  bt=(nx||!S.beta)?null:betaList().filter(b=>nxOk(b.version)&&(!curN||vc(b.version,curN.r.version)>0)).sort((x,y)=>vc(y.version,x.version))[0];
+  newer=x=>!cur||vc(x.r.version,cur.r.version)>0,
+  nx=L.filter(x=>x.s.c==='wait'&&newer(x)).sort((x,y)=>x.s.a-y.s.a||vc(y.r.version,x.r.version))[0],
+  bt=(nx||!S.beta)?null:betaList().filter(b=>nxOk(b.version)&&(!cur||vc(b.version,cur.r.version)>0)).sort((x,y)=>vc(y.version,x.version))[0];
   const set=(id,t)=>{$(id).textContent=t};
   // 現在入れれる
   if(cur){set('#curV',cur.r.version);set('#curD',`${ymd(cur.s.a)}〜`);set('#curS',`リリース ${ymd(new Date(cur.r.released))}`);
