@@ -85,6 +85,13 @@ def main():
                 r["sec"] = urljoin("https://support.apple.com", href.group(1))
     except Exception as e:  # noqa
         print("WARN: security releases取得失敗（対応機種は前回値のまま）:", e, file=sys.stderr)
+    # ベータ履歴: 正式版が出ると betas から消えるため、betaLog に全ビルドを恒久的に蓄積する（削除しない。公開日予測の統計用）
+    log = {(e["version"], e["label"], e.get("build", "")): e for e in db.get("betaLog", [])}
+    for (ver, build), b in bet.items():
+        k = (ver, b["label"], build)
+        old = log.get(k, {})
+        log[k] = {**old, **{x: y for x, y in b.items() if y}, "seen": min(old.get("seen", b["seen"]), b["seen"])}
+    db["betaLog"] = sorted(log.values(), key=lambda e: e["seen"])
     released_versions = {v for v, _ in rel}
     db["releases"] = sorted(rel.values(), key=lambda r: r["released"], reverse=True)
     db["betas"] = sorted((b for k, b in bet.items() if k[0] not in released_versions),

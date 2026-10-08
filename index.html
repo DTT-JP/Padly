@@ -165,6 +165,14 @@ main{flex:1;display:grid;gap:24px;align-content:start;
 .field select:focus,.field input:focus{outline:none;border:2px solid var(--md-sys-color-primary);padding-left:15px}
 .field select:focus{padding-right:47px}
 .field select:focus+label,.field input:focus+label{color:var(--md-sys-color-primary)}
+.datefield .show{display:flex;align-items:center;height:56px;padding:0 48px 0 16px;border:1px solid var(--md-sys-color-outline);border-radius:var(--md-sys-shape-corner-extra-small);font:400 16px/24px var(--md-ref-typeface);letter-spacing:.5px;color:var(--md-sys-color-on-surface)}
+.field.datefield input{position:absolute;inset:0;z-index:1;width:100%;height:100%;min-width:0;padding:0;margin:0;border:0;opacity:0;font-size:16px;cursor:pointer;-webkit-appearance:none;appearance:none}
+.field.datefield input:focus{border:0;padding:0}
+@media (hover:hover){.datefield:hover .show{border-color:var(--md-sys-color-on-surface)}}
+.datefield:focus-within .show{border:2px solid var(--md-sys-color-primary);padding-left:15px}
+.datefield:focus-within label{color:var(--md-sys-color-primary)}
+.datefield label{z-index:2}
+.field.datefield .ms{z-index:2}
 .supporting{margin:4px 16px 0;color:var(--md-sys-color-on-surface-variant)}
 
 /* ===== Filter chip（32px / shape-small）===== */
@@ -267,10 +275,15 @@ ul.list{list-style:none;margin:0;padding:0}
         <p class="body-small supporting" style="margin-top:0">Apple公式の対応機種一覧に載っているものから選択します。</p>
       </div>
       <div class="set-sec">
-        <div class="title-small cap">使用中の iPadOS（メジャー）</div>
-        <div class="chips" id="majors" role="group" aria-label="iPadOSメジャー"></div>
+        <div class="title-small cap">表示するメジャー（次に入れれる・予定・履歴）</div>
+        <div class="chips" id="nxMajors" role="group" aria-label="表示するiPadOSメジャー"></div>
+        <p class="body-small supporting" style="margin:0">タップでオフにすると、そのメジャーを表示しません。初期値は最新の2つです。</p>
       </div>
-      <p class="body-small supporting" style="margin:0">設定はこの端末のSafariに保存され、次回から自動で反映されます。</p>
+      <div class="set-sec">
+        <div class="title-small cap">ベータ版（次に入れれる）</div>
+        <div class="chips"><button class="chip sl" id="betaChip" aria-pressed="true"><span class="ms s18" aria-hidden="true">check</span>ベータを含める</button></div>
+      </div>
+      <p class="body-small supporting" style="margin:0">設定はこの端末のブラウザ（localStorage）に保存され、次回から自動で反映されます。</p>
     </div>
   </details>
 
@@ -281,11 +294,14 @@ ul.list{list-style:none;margin:0;padding:0}
 
   <section id="pUp" class="panel" role="tabpanel" aria-labelledby="tUp">
     <div>
-      <div class="field">
+      <div class="field datefield">
+        <div class="show" id="simShow" aria-hidden="true"></div>
         <input type="date" id="sim" aria-label="仮の公開日">
         <label for="sim">仮の公開日</label>
+        <span class="ms" aria-hidden="true">calendar_today</span>
       </div>
-      <p class="body-small supporting">Appleは公開日を事前に発表しません。この日に公開された場合の入手可能日を計算します。</p>
+      <p class="body-small supporting" id="simNote">Appleは公開日を事前に発表しません。この日に公開された場合の入手可能日を計算します。</p>
+      <button class="btn-text sl" id="simReset" hidden><span class="ms s18" aria-hidden="true">restart_alt</span>予測値に戻す</button>
     </div>
     <div id="upList"></div>
   </section>
@@ -302,7 +318,13 @@ ul.list{list-style:none;margin:0;padding:0}
 <script>
 const $=s=>document.querySelector(s),DAY=864e5,TZ='Asia/Tokyo';
 const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
-const S={days:store.get('days',30),major:store.get('major',null),model:store.get('model',''),
+// 設定の保存先: localStorage のみ（キー padly）
+const loadCfg=()=>{try{const v=localStorage.getItem('padly');if(v)return JSON.parse(v)}catch{}
+  return{days:store.get('days',30),model:store.get('model','')}},  // 旧版(個別キー)からの引き継ぎ
+saveCfg=()=>{try{localStorage.setItem('padly',JSON.stringify({days:S.days,model:S.model,beta:S.beta,excl:S.excl,sim:S.simUser}))}catch{}};
+const CFG=loadCfg();
+const S={days:CFG.days??30,model:CFG.model??'',beta:CFG.beta??true,simUser:CFG.sim??null,excl:Array.isArray(CFG.excl)?CFG.excl:null,  // excl=null は初期値（最新2メジャーのみ表示）
+
   sim:new Date().toLocaleDateString('sv-SE',{timeZone:TZ})};
 let D={releases:[],betas:[],models:{}},first=true;
 const maj=v=>+v.split('.')[0],esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -328,27 +350,57 @@ function parse(p){let m;const l=/ and later$/.test(p);p=p.replace(/ and later$/,
 // 対応判定: true=対応 / false=非対応 / null=公式表記なし・解釈不能（表示は残す）
 function fits(r,M){const ps=(r.models||[]).map(parse).filter(Boolean);if(!ps.length)return null;
   return ps.some(x=>x[0]===M[1]&&(x[2]?M[2]>=x[1]:M[2]===x[1]))}
+// 機種名を日本語表記へ（例: iPad (10th generation) → iPad (第10世代)）。内部の照合キーは英語のまま
+const jp=n=>n.replace(/\((\d+)(?:st|nd|rd|th)? - (\d+)(?:st|nd|rd|th) generation\)/,'(第$1〜$2世代)')
+  .replace(/(\d+)(?:st|nd|rd|th) generation/g,'第$1世代').replace(/(\d+(?:\.\d+)?)-inch/g,'$1インチ').replace(/ and later$/,' 以降');
 const MOD=()=>CAT.find(c=>c[0]===S.model);
 const okM=r=>{const M=MOD();return !M||fits(r,M)!==false};
-const cand=()=>D.releases.filter(r=>okM(r)&&(!S.major||maj(r.version)>=S.major));
+let MJ=[];  // 全メジャー（新しい順）
+const ex=()=>S.excl??MJ.slice(2),nxOk2=m=>!ex().includes(m),nxOk=v=>nxOk2(maj(v));
+const base=()=>D.releases.filter(okM),cand=()=>base().filter(r=>nxOk(r.version));
 function status(r){const a=avail(r.released),n=left(a);
   if(r.expires&&new Date(r.expires)<new Date())return{c:'end',t:'配信終了',i:'block',a};
   return n<=0?{c:'ok',t:'入手可能',i:'check_circle',a}:{c:'wait',t:`あと${n}日`,i:'schedule',a}}
 const simAvail=()=>new Date(new Date(S.sim+'T00:00:00+09:00').getTime()+S.days*DAY);
-const link=(u,t)=>`<a class="btn-text sl" href="${esc(u)}" target="_blank" rel="noopener"><span class="ms s18" aria-hidden="true">open_in_new</span>${t}</a>`;
+// 公式リンクを日本語ページへ（Apple Developer は /jp/、Appleサポートは ja-jp）。リリースノート(go/?id=)は日本語版がないためそのまま
+const ja=u=>u.replace('://developer.apple.com/news/','://developer.apple.com/jp/news/').replace('://support.apple.com/en-us/','://support.apple.com/ja-jp/');
+const link=(u,t)=>`<a class="btn-text sl" href="${esc(ja(u))}" target="_blank" rel="noopener"><span class="ms s18" aria-hidden="true">open_in_new</span>${t}</a>`;
 const lk=r=>(r.sec||r.link||r.notes)?`<div class="links">${r.sec?link(r.sec,'セキュリティ情報'):''}${r.link?link(r.link,'リリース情報'):''}${r.notes?link(r.notes,'リリースノート'):''}</div>`:'';
-const dev=r=>r.models?.length?`<details class="models extra"><summary class="sl label-large"><span class="ms s18" aria-hidden="true">expand_more</span>対応モデル（Apple公式表記）</summary><div class="body-small">${r.models.map(esc).join('<br>')}</div></details>`:'<div class="body-small sup extra">対応モデル: 未公表（ベータ等）／データ更新で反映</div>';
+const dev=r=>r.models?.length?`<details class="models extra"><summary class="sl label-large"><span class="ms s18" aria-hidden="true">expand_more</span>対応モデル</summary><div class="body-small">${r.models.map(m=>esc(jp(m))).join('<br>')}</div></details>`:'<div class="body-small sup extra">対応モデル: 未公表（ベータ等）／データ更新で反映</div>';
 function grp(list,row){const g={};list.forEach(x=>(g[maj(x.version)]??=[]).push(x));
   return Object.keys(g).sort((a,b)=>b-a).map(m=>`<h3 class="subheader title-small">iPadOS ${m}</h3><ul class="list">${g[m].map(row).join('')}</ul>`).join('')||'<p class="empty body-medium">該当するデータがありません。</p>'}
-function betaList(){const seen=new Set();return D.betas.filter(b=>(!S.major||maj(b.version)>=S.major)&&!seen.has(b.version)&&seen.add(b.version))}
+/* ベータ n から正式公開までの日数を、過去の同種の更新（メジャー/マイナー別）の中央値で予測 */
+const nv=v=>v.replace(/(\.0)+$/,''),nl=l=>l.toLowerCase().replace('release candidate','rc').replace(/\s+/g,' ').trim(),
+isMaj=v=>!nv(v).includes('.'),lord=l=>{const m=l.match(/(\d+)$/);return l.startsWith('rc')?99+(m?+m[1]:1):(m?+m[1]:1)},
+med=a=>{a=[...a].sort((x,y)=>x-y);const h=a.length>>1;return a.length%2?a[h]:(a[h-1]+a[h])/2},
+jstDay=t=>new Date(t).toLocaleDateString('sv-SE',{timeZone:TZ}),
+lbl=l=>{const m=nl(l).match(/^(beta|rc)(?: (\d+))?$/);return m?(m[1]==='rc'?'RC':'ベータ')+(m[2]?' '+m[2]:m[1]==='beta'?' 1':''):l};
+function predict(b){const rel={},first={},by={};
+  D.releases.forEach(r=>{const k=nv(r.version),t=+new Date(r.released);if(!rel[k]||t<rel[k])rel[k]=t});
+  (D.betaLog||[]).forEach(e=>{const k=nv(e.version)+'|'+nl(e.label),t=+new Date(e.seen);if(!first[k]||t<first[k])first[k]=t});
+  Object.entries(first).forEach(([k,t])=>{const[v,l]=k.split('|');
+    if(v===nv(b.version)||isMaj(v)!==isMaj(b.version)||!rel[v]||rel[v]<t)return;(by[l]??=[]).push((rel[v]-t)/DAY)});
+  const L=nl(b.label);let a=by[L],adj=0;
+  if(!a){const c=Object.keys(by).filter(l=>lord(l)<=lord(L)).sort((x,y)=>lord(y)-lord(x))[0];if(!c)return null;a=by[c];adj=7}
+  const days=Math.max(adj?7:1,Math.round(med(a)-adj));
+  return{days,n:a.length,date:jstDay(+new Date(b.seen)+days*DAY),kind:isMaj(b.version)?'メジャー':'マイナー'}}
+function applySim(){const t=betaList().sort((x,y)=>vc(y.version,x.version)||new Date(y.seen)-new Date(x.seen))[0],
+  key=t?t.version+'|'+t.label:'',p=t?predict(t):null,u=S.simUser&&S.simUser.key===key?S.simUser:null;
+  S.sim=u?u.date:p?p.date:jstDay(Date.now());S.simKey=key;
+  $('#sim').value=S.sim;$('#simShow').textContent=ymd(new Date(S.sim+'T00:00:00+09:00'));
+  $('#simReset').hidden=!(u&&p);
+  $('#simNote').textContent=p?`${u?'手動で変更中。':''}予測: ${t.version} ${lbl(t.label)} → 公開まで約${p.days}日（過去${p.n}回の${p.kind}更新の中央値）。公開日は事前発表されないため目安です。`:'Appleは公開日を事前に発表しません。この日に公開された場合の入手可能日を計算します。'}
+function betaList(){const seen=new Set();return D.betas.filter(b=>nxOk(b.version)&&!seen.has(b.version)&&seen.add(b.version))}
 
 /* 上部2カード:「現在入れれる」「次に入れれる」 */
 function hero(){
-  const L=cand().map(r=>({r,s:status(r)})),
+  const L=base().map(r=>({r,s:status(r)})),
   cur=L.filter(x=>x.s.c==='ok').sort((x,y)=>vc(y.r.version,x.r.version))[0],
-  newer=x=>!cur||vc(x.r.version,cur.r.version)>0,
-  nx=L.filter(x=>x.s.c==='wait'&&newer(x)).sort((x,y)=>x.s.a-y.s.a||vc(y.r.version,x.r.version))[0],
-  bt=nx?null:betaList().filter(b=>!cur||vc(b.version,cur.r.version)>0).sort((x,y)=>vc(y.version,x.version))[0];
+  P2=L.filter(x=>nxOk(x.r.version)),  // 「次に入れれる」用（メジャー制限後）
+  curN=P2.filter(x=>x.s.c==='ok').sort((x,y)=>vc(y.r.version,x.r.version))[0],
+  newer=x=>!curN||vc(x.r.version,curN.r.version)>0,
+  nx=P2.filter(x=>x.s.c==='wait'&&newer(x)).sort((x,y)=>x.s.a-y.s.a||vc(y.r.version,x.r.version))[0],
+  bt=(nx||!S.beta)?null:betaList().filter(b=>nxOk(b.version)&&(!curN||vc(b.version,curN.r.version)>0)).sort((x,y)=>vc(y.version,x.version))[0];
   const set=(id,t)=>{$(id).textContent=t};
   // 現在入れれる
   if(cur){set('#curV',cur.r.version);set('#curD',`${ymd(cur.s.a)}〜`);set('#curS',`リリース ${ymd(new Date(cur.r.released))}`);
@@ -360,7 +412,7 @@ function hero(){
   else if(bt){const a=simAvail();set('#nxtV',bt.version);set('#nxtD',`${ymd(a)}〜（仮）`);set('#nxtR','リリース 未定');set('#nxtS',`${bt.label}中・仮の公開日 ${ymd(new Date(S.sim+'T00:00:00+09:00'))} で計算`);
     $('#cardNxt').setAttribute('aria-label',`次に入れれるiPadOS : ${bt.version} (${ymd(a)}〜（仮） / リリース未定)`)}
   else{set('#nxtV','なし');set('#nxtD','待機中の更新はありません');set('#nxtR','');set('#nxtS','');$('#cardNxt').setAttribute('aria-label','次に入れれるiPadOS : なし')}
-  $('#sum').textContent=`遅延${S.days}日 ／ ${S.model||'モデル未選択'} ／ ${S.major?'iPadOS '+S.major+' 以降':'すべての系統'}`}
+  $('#sum').textContent=`遅延${S.days}日 ／ ${S.model?jp(S.model):'モデル未選択'} ／ 表示 ${MJ.filter(nxOk2).join('・')||'なし'} ／ ベータ${S.beta?'あり':'なし'}`}
 function hist(){$('#hList').innerHTML=grp(cand(),r=>{const s=status(r);
   return`<li class="li"><span class="ms lead ${s.c==='ok'?'ok fill':''}" aria-hidden="true">${s.i}</span>
   <div><div class="body-large">iPadOS ${esc(r.version)}</div><div class="body-medium sup">${esc(r.build)} ・ 公開 ${ymd(new Date(r.released))}</div>${lk(r)}</div>
@@ -370,21 +422,24 @@ function up(){const base=simAvail();
   `<li class="li"><span class="ms lead" aria-hidden="true">science</span>
   <div><div class="body-large">iPadOS ${esc(b.version)}</div><div class="body-medium sup">${esc(b.label)}（${esc(b.build)}）・ 公開日は未定</div>${lk(b)}</div>
   <div class="trail"><span class="status label-medium wait">仮 ${ymd(base)}〜</span><span class="body-small sup">公開日＋${S.days}日</span></div>${dev(b)}</li>`)}
-function majors(){const M=[...new Set(D.releases.map(r=>maj(r.version)))].sort((a,b)=>b-a);
-  if(S.major===null)S.major=M[1]??M[0]??0;
-  $('#majors').innerHTML=[0,...M].map(m=>`<button class="chip sl" data-m="${m}" aria-pressed="${m===S.major}"><span class="ms s18" aria-hidden="true">check</span>${m?m+' 以降':'すべて'}</button>`).join('')}
+function nxUI(){$('#betaChip').setAttribute('aria-pressed',S.beta);
+  $('#nxMajors').innerHTML=MJ.map(m=>`<button class="chip sl" data-x="${m}" aria-pressed="${nxOk2(m)}"><span class="ms s18" aria-hidden="true">check</span>iPadOS ${m}</button>`).join('')}
 function models(){const ok=CAT.filter(c=>D.releases.some(r=>fits(r,c)===true));
-  $('#model').innerHTML='<option value="">未選択（すべて表示）</option>'+ok.map(c=>`<option${c[0]===S.model?' selected':''}>${esc(c[0])}</option>`).join('')}
+  $('#model').innerHTML='<option value="">未選択（すべて表示）</option>'+ok.map(c=>`<option value="${esc(c[0])}"${c[0]===S.model?' selected':''}>${esc(jp(c[0]))}</option>`).join('')}
 function slider(){const e=$('#days');e.style.setProperty('--ratio',(S.days-e.min)/(e.max-e.min))}
-function all(){hero();hist();up();$('#dv').textContent=S.days;slider()}
-function init(d){D={releases:[],betas:[],models:{},...d};$('#days').value=S.days;$('#sim').value=S.sim;models();majors();all();
+function all(){applySim();hero();hist();up();$('#dv').textContent=S.days;slider()}
+function init(d){D={releases:[],betas:[],models:{},...d};MJ=[...new Set([...D.releases,...D.betas].map(x=>maj(x.version)))].sort((a,b)=>b-a);$('#days').value=S.days;models();nxUI();all();
   if(first){$('#set').open=!S.model;first=false}
   const u=new Date(D.updated),t=$('#upd');
   if(isNaN(u)){t.textContent='最終更新 不明'}else{t.textContent=`最終更新 ${ymdhm(u)} (JST)`;t.dateTime=u.toISOString()}}
-$('#days').oninput=e=>{S.days=+e.target.value;store.set('days',S.days);all()};
-$('#model').onchange=e=>{S.model=e.target.value;store.set('model',S.model);all()};
-$('#majors').onclick=e=>{const m=e.target.closest('[data-m]');if(!m)return;S.major=+m.dataset.m;store.set('major',S.major);majors();all()};
-$('#sim').onchange=e=>{if(e.target.value){S.sim=e.target.value;hero();up()}};
+$('#days').oninput=e=>{S.days=+e.target.value;saveCfg();all()};
+$('#model').onchange=e=>{S.model=e.target.value;saveCfg();all()};
+$('#betaChip').onclick=()=>{S.beta=!S.beta;saveCfg();nxUI();applySim();hero()};
+$('#nxMajors').onclick=e=>{const b=e.target.closest('[data-x]');if(!b)return;const m=+b.dataset.x,c=ex();
+  S.excl=c.includes(m)?c.filter(x=>x!==m):[...c,m];saveCfg();nxUI();all()};
+$('#sim').onchange=e=>{if(e.target.value){S.simUser={key:S.simKey,date:e.target.value};saveCfg();applySim();hero();up()}};
+$('#sim').onclick=e=>{try{e.target.showPicker&&e.target.showPicker()}catch{}};
+$('#simReset').onclick=()=>{S.simUser=null;saveCfg();applySim();hero();up()};
 const tab=t=>{$('#pUp').hidden=t!=='up';$('#pHist').hidden=t!=='hist';$('#tUp').setAttribute('aria-selected',t==='up');$('#tHist').setAttribute('aria-selected',t==='hist')};
 $('#tUp').onclick=()=>tab('up');$('#tHist').onclick=()=>tab('hist');
 const bar=$('#bar'),sc=()=>bar.classList.toggle('scrolled',scrollY>0);addEventListener('scroll',sc,{passive:true});sc();

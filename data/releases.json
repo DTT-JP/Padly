@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-06T22:39:52+00:00",
+ "updated": "2026-10-07T23:06:12+00:00",
  "releases": [
   {
    "version": "27.0.1",
@@ -1252,6 +1252,174 @@
    "label": "beta 2",
    "seen": "2026-09-21T17:00:00+00:00",
    "link": "https://developer.apple.com/news/releases/?id=09212026b",
+   "notes": "https://developer.apple.com/go/?id=ipados-27_2-rn"
+  }
+ ],
+ "betaLog": [
+  {
+   "version": "26",
+   "label": "beta 1",
+   "seen": "2025-06-09T17:00:00+00:00"
+  },
+  {
+   "version": "26",
+   "label": "beta 2",
+   "seen": "2025-06-23T17:00:00+00:00"
+  },
+  {
+   "version": "26",
+   "label": "beta 3",
+   "seen": "2025-07-07T17:00:00+00:00"
+  },
+  {
+   "version": "26",
+   "label": "beta 4",
+   "seen": "2025-07-22T17:00:00+00:00"
+  },
+  {
+   "version": "26",
+   "label": "beta 5",
+   "seen": "2025-08-05T17:00:00+00:00"
+  },
+  {
+   "version": "26",
+   "label": "beta 6",
+   "seen": "2025-08-11T17:00:00+00:00"
+  },
+  {
+   "version": "26",
+   "label": "beta 7",
+   "seen": "2025-08-18T17:00:00+00:00"
+  },
+  {
+   "version": "26",
+   "label": "beta 8",
+   "seen": "2025-08-25T17:00:00+00:00"
+  },
+  {
+   "version": "26",
+   "label": "beta 9",
+   "seen": "2025-09-02T17:00:00+00:00"
+  },
+  {
+   "version": "26",
+   "label": "RC",
+   "seen": "2025-09-09T17:00:00+00:00"
+  },
+  {
+   "version": "26.2",
+   "label": "beta 1",
+   "seen": "2025-11-04T17:00:00+00:00"
+  },
+  {
+   "version": "26.2",
+   "label": "beta 2",
+   "seen": "2025-11-12T17:00:00+00:00"
+  },
+  {
+   "version": "26.2",
+   "label": "beta 3",
+   "seen": "2025-11-17T17:00:00+00:00"
+  },
+  {
+   "version": "26.2",
+   "label": "RC",
+   "seen": "2025-12-03T17:00:00+00:00"
+  },
+  {
+   "version": "26.2",
+   "label": "RC 2",
+   "seen": "2025-12-08T17:00:00+00:00"
+  },
+  {
+   "version": "26.4",
+   "label": "beta 1",
+   "seen": "2026-02-16T17:00:00+00:00"
+  },
+  {
+   "version": "26.4",
+   "label": "beta 3",
+   "seen": "2026-03-02T17:00:00+00:00"
+  },
+  {
+   "version": "26.4",
+   "label": "beta 4",
+   "seen": "2026-03-09T17:00:00+00:00"
+  },
+  {
+   "version": "26.4",
+   "label": "RC",
+   "seen": "2026-03-18T17:00:00+00:00"
+  },
+  {
+   "version": "26.5",
+   "label": "beta 1",
+   "seen": "2026-03-30T17:00:00+00:00"
+  },
+  {
+   "version": "26.5",
+   "label": "beta 3",
+   "seen": "2026-04-20T17:00:00+00:00"
+  },
+  {
+   "version": "26.5",
+   "label": "beta 4",
+   "seen": "2026-04-27T17:00:00+00:00"
+  },
+  {
+   "version": "26.5",
+   "label": "RC",
+   "seen": "2026-05-04T17:00:00+00:00"
+  },
+  {
+   "version": "26.5",
+   "label": "RC 2",
+   "seen": "2026-05-08T17:00:00+00:00"
+  },
+  {
+   "version": "26.6",
+   "label": "beta 1",
+   "seen": "2026-05-26T17:00:00+00:00"
+  },
+  {
+   "version": "26.6",
+   "label": "beta 2",
+   "seen": "2026-06-15T17:00:00+00:00"
+  },
+  {
+   "version": "26.6",
+   "label": "beta 3",
+   "seen": "2026-06-29T17:00:00+00:00"
+  },
+  {
+   "version": "26.6",
+   "label": "beta 4",
+   "seen": "2026-07-06T17:00:00+00:00"
+  },
+  {
+   "version": "26.6",
+   "label": "beta 5",
+   "seen": "2026-07-13T17:00:00+00:00"
+  },
+  {
+   "version": "26.6",
+   "label": "RC",
+   "seen": "2026-07-20T17:00:00+00:00"
+  },
+  {
+   "version": "27.2",
+   "build": "24B5089g",
+   "label": "beta 2",
+   "seen": "2026-09-21T17:00:00+00:00",
+   "link": "https://developer.apple.com/news/releases/?id=09212026b",
+   "notes": "https://developer.apple.com/go/?id=ipados-27_2-rn"
+  },
+  {
+   "version": "27.2",
+   "build": "24B5099f",
+   "label": "beta 3",
+   "seen": "2026-10-05T18:00:00+00:00",
+   "link": "https://developer.apple.com/news/releases/?id=10052026b",
    "notes": "https://developer.apple.com/go/?id=ipados-27_2-rn"
   }
  ]
