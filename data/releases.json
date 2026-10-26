@@ -1,6 +1,53 @@
 {
- "updated": "2026-10-25T20:51:57+00:00",
+ "updated": "2026-10-26T22:40:56+00:00",
  "releases": [
+  {
+   "version": "27.2",
+   "build": "24B119",
+   "released": "2026-10-26T17:00:00+00:00",
+   "expires": null,
+   "src": "rss",
+   "link": "https://developer.apple.com/news/releases/?id=10262026c",
+   "notes": "https://developer.apple.com/go/?id=ipados-27_2-rn",
+   "models": [
+    "iPad 9th generation and later",
+    "iPad Air 4th generation and later",
+    "iPad Pro 11-inch 2nd generation and later",
+    "iPad Pro 12.9-inch 4th generation and later",
+    "iPad mini 6th generation and later"
+   ],
+   "sec": "https://support.apple.com/en-us/149230"
+  },
+  {
+   "version": "26.7.2",
+   "build": "23H128",
+   "released": "2026-10-26T17:00:00+00:00",
+   "expires": null,
+   "src": "rss",
+   "link": "https://developer.apple.com/news/releases/?id=10262026h",
+   "notes": "https://developer.apple.com/go/?id=ipados-26_7_2-rn",
+   "models": [
+    "iPad 8th generation and later",
+    "iPad Air 3rd generation and later",
+    "iPad Pro 11-inch 1st generation and later",
+    "iPad Pro 12.9-inch 3rd generation and later",
+    "iPad mini 5th generation and later"
+   ],
+   "sec": "https://support.apple.com/en-us/149227"
+  },
+  {
+   "version": "18.7.11",
+   "build": "22H384",
+   "released": "2026-10-26T17:00:00+00:00",
+   "expires": null,
+   "src": "rss",
+   "link": "https://developer.apple.com/news/releases/?id=10262026j",
+   "notes": "https://developer.apple.com/go/?id=ipados-18_7_11-rn",
+   "models": [
+    "iPad 7th generation"
+   ],
+   "sec": "https://support.apple.com/en-us/149225"
+  },
   {
    "version": "27.0.1",
    "build": "24A446",
@@ -1237,40 +1284,7 @@
    "sec": "https://support.apple.com/en-us/120308"
   }
  ],
- "betas": [
-  {
-   "version": "27.2",
-   "build": "24B115",
-   "label": "RC",
-   "seen": "2026-10-19T17:00:00+00:00",
-   "link": "https://developer.apple.com/news/releases/?id=10192026b",
-   "notes": "https://developer.apple.com/go/?id=ipados-27_2-rn"
-  },
-  {
-   "version": "27.2",
-   "build": "24B5110a",
-   "label": "beta 4",
-   "seen": "2026-10-13T17:00:00+00:00",
-   "link": "https://developer.apple.com/news/releases/?id=10132026b",
-   "notes": "https://developer.apple.com/go/?id=ipados-27_2-rn"
-  },
-  {
-   "version": "27.2",
-   "build": "24B5099f",
-   "label": "beta 3",
-   "seen": "2026-10-05T18:00:00+00:00",
-   "link": "https://developer.apple.com/news/releases/?id=10052026b",
-   "notes": "https://developer.apple.com/go/?id=ipados-27_2-rn"
-  },
-  {
-   "version": "27.2",
-   "build": "24B5089g",
-   "label": "beta 2",
-   "seen": "2026-09-21T17:00:00+00:00",
-   "link": "https://developer.apple.com/news/releases/?id=09212026b",
-   "notes": "https://developer.apple.com/go/?id=ipados-27_2-rn"
-  }
- ],
+ "betas": [],
  "betaLog": [
   {
    "version": "26",
