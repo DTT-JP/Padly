@@ -1,6 +1,50 @@
 {
- "updated": "2026-11-08T22:06:37+00:00",
+ "updated": "2026-11-10T01:32:15+00:00",
  "releases": [
+  {
+   "version": "27.2.1",
+   "build": "24B156",
+   "released": "2026-11-09T18:00:00+00:00",
+   "expires": null,
+   "src": "rss",
+   "link": "https://developer.apple.com/news/releases/?id=11092026c",
+   "models": [
+    "iPad 9th generation and later",
+    "iPad Air 4th generation and later",
+    "iPad Pro 11-inch 2nd generation and later",
+    "iPad Pro 12.9-inch 4th generation and later",
+    "iPad mini 6th generation and later"
+   ],
+   "sec": "https://support.apple.com/en-us/149715"
+  },
+  {
+   "version": "26.7.3",
+   "build": "23H131",
+   "released": "2026-11-09T18:00:00+00:00",
+   "expires": null,
+   "src": "rss",
+   "link": "https://developer.apple.com/news/releases/?id=11092026g",
+   "models": [
+    "iPad 8th generation and later",
+    "iPad Air 3rd generation and later",
+    "iPad Pro 11-inch 1st generation and later",
+    "iPad Pro 12.9-inch 3rd generation and later",
+    "iPad mini 5th generation and later"
+   ],
+   "sec": "https://support.apple.com/en-us/149716"
+  },
+  {
+   "version": "18.7.12",
+   "build": "22H390",
+   "released": "2026-11-09T18:00:00+00:00",
+   "expires": null,
+   "src": "rss",
+   "link": "https://developer.apple.com/news/releases/?id=11092026i",
+   "models": [
+    "iPad 7th generation"
+   ],
+   "sec": "https://support.apple.com/en-us/149717"
+  },
   {
    "version": "27.2",
    "build": "24B119",
