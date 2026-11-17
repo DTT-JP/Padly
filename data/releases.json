@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-15T22:48:52+00:00",
+ "updated": "2026-11-17T01:52:32+00:00",
  "releases": [
   {
    "version": "27.2.1",
@@ -1331,6 +1331,14 @@
  "betas": [
   {
    "version": "27.3",
+   "build": "24C5049d",
+   "label": "beta 2",
+   "seen": "2026-11-16T18:00:00+00:00",
+   "link": "https://developer.apple.com/news/releases/?id=11162026b",
+   "notes": "https://developer.apple.com/go/?id=ipados-27_3-rn"
+  },
+  {
+   "version": "27.3",
    "build": "24C5037i",
    "label": "beta",
    "seen": "2026-11-03T18:00:00+00:00",
@@ -1527,6 +1535,14 @@
    "label": "beta",
    "seen": "2026-11-03T18:00:00+00:00",
    "link": "https://developer.apple.com/news/releases/?id=11032026b",
+   "notes": "https://developer.apple.com/go/?id=ipados-27_3-rn"
+  },
+  {
+   "version": "27.3",
+   "build": "24C5049d",
+   "label": "beta 2",
+   "seen": "2026-11-16T18:00:00+00:00",
+   "link": "https://developer.apple.com/news/releases/?id=11162026b",
    "notes": "https://developer.apple.com/go/?id=ipados-27_3-rn"
   }
  ]
